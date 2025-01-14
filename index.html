@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iOS Style App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      overflow: hidden;
+    }
+    header {
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+      background-color: #5012ed;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .header-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px; /* Ограничиваем ширину хедера */
+      justify-content: space-between; /* Размещаем значки по краям */
+    }
+    
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    #logo-icon {
+      background-image: url('img/1win.png'); /* Путь к значку логотипа */
+      padding-left: 20px;
+    }
+    
+    #telegram-icon {
+      background-image: url('img/TG.jpg'); /* Путь к значку Telegram */
+      border-radius: 50px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-title {
+      font-size: 18px;
+      color: white;
+      text-align: center;
+      flex: 1; /* Расширяет текст, чтобы он располагался между значками */
+      margin: 0 20px; /* Отступы между текстом и значками */
+    }
+    
+.text {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 14px;
+  align-items: center;
+  color: #5012ed;
+  padding-bottom: 75px;
+}
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 150px);
+    }
+
+    #result {
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    button {
+      font-family:sans-serif;
+      font-weight: bold;
+      margin-top: 70px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #080b0f;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #5012ed;
+      border-top: 1px solid #ccc;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 80px;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      display: flex;
+      align-items:normal;
+      justify-content:space-around;
+      font-size: 11px;
+      color: white; /* Цвет текста */
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Тень для текста */
+      margin-bottom: 20px;
+    }
+    
+    .card#card1 {
+      filter: blur(2px);
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(11, 11, 11, 0.679);
+      background-image: url('img/mines.jpg'); /* Замени на свою ссылку */
+      z-index: 1;
+    }
+    .card#card1 span {
+      z-index: 2;
+    }
+    
+    .card#card2 {
+      width: 60px;
+      height: 60px; 
+      border: 2px solid #000000de;
+      background-image: url('img/lucky.jpg'); /* Замени на свою ссылку */
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    .card#card2 span {
+      padding-top: 40px;
+    }
+
+    .card#card3 { 
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(11, 11, 11, 0.679);
+      background-image: url('image3.jpg'); /* Замени на свою ссылку */
+    }
+    
+
+    .card.selected {
+      background-color: #007bff;
+      color: white;
+    }
+    
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="header-icon" id="logo-icon"></div>
+      <h1 class="header-title">Lucky Mod 2025</h1>
+      <div class="header-icon" id="telegram-icon"></div>
+    </div>
+  </header>
+  
+
+  <main>
+    <div class="text">
+    Нажмите НОВЫЙ РАУНД для получения сигнала 
+    </div>
+    <div id="result">
+      <!-- Анимация или результат появятся здесь -->
+    </div>
+    <button onclick="startNewRound()">НОВЫЙ РАУНД</button>
+  </main>
+
+  <footer>
+    <div class="card" id="card1"><span> < /span></div>
+    <div class="card" id="card2" selected"><span> Lucky Jet </span></div>
+    <div class="card" id="card3"><span></span></div>
+  </footer>
+
+  <script>
+    // Массив с картинками
+    const images = [
+      "img/signal.jpg", // Замени на свои ссылки
+      "img/result2.png",
+      "img/result3.png",
+      "img/result5.png",
+      "img/result6.png",
+      "img/result7.png",
+      "img/result8.png",
+      "img/result9.png",
+      "img/result10.png",
+      "img/result11.png",
+      "img/result12.png",
+      "img/result13.png",
+      "img/result14.png",
+      "img/result15.png",
+      "img/result16.png",
+      "img/result17.png",
+      "img/result18.png",
+      "img/result19.png",
+      "img/result20.png",
+      "img/result21.png",
+      "img/result22.png",
+      "img/result23.png",
+      "img/result24.png",
+      "img/result25.png",
+      "img/result26.png",
+      "img/result27.png",
+      "img/result28.png",
+      "img/result29.png",
+      "img/result30.png",
+      "img/result31.png",
+      "img/result32.png",
+      "img/result33.png",
+      "img/result34.png",
+      "img/result35.png",
+      "img/result36.png",
+      "img/result37.png",
+      "img/result38.png",
+      "img/result39.png",
+      "img/result40.png",
+      "img/result41.png",
+      "img/result42.png",
+      "img/result43.png",
+      "img/result44.png",
+    ];
+
+    // Элемент для отображения результата
+    const resultFrame = document.getElementById("result");
+
+    // Путь к вашей пользовательской анимации (SVG или GIF)
+    const animationPath = "img/loading.svg"; // Замени на свой файл
+
+    // Функция для выбора случайной картинки
+    function getRandomImage() {
+      const randomIndex = Math.floor(Math.random() * images.length);
+      return images[randomIndex];
+    }
+
+    // Функция, которая запускается при нажатии на кнопку
+    function startNewRound() {
+      resultFrame.style.backgroundImage = ""; // Очистить предыдущий результат
+      resultFrame.innerHTML = `<img src="${animationPath}" alt="Animation" style="width: 100px; height: 100px;">`; // Запуск анимации
+
+      // Через 3 секунды заменить анимацию на случайную картинку
+      setTimeout(() => {
+        resultFrame.innerHTML = ""; // Убрать анимацию
+        resultFrame.style.backgroundImage = `url(${getRandomImage()})`;
+      }, 3000);
+    }
+    
+  </script>
+
+</body>
+</html>
