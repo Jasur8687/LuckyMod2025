@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Мини Игра - Звёзды</title>
+  <style>
+     html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* убрать скролл */
+    height: 100%;
+  }
+    :root {
+      --bg: radial-gradient(circle at center, #061828, #000000);
+      --cell-bg: rgba(255, 255, 255, 0.05);
+      --cell-border: rgba(255, 255, 255, 0.08);
+      --cell-shadow: rgba(255, 255, 255, 0.05);
+      --btn-bg: rgba(255, 255, 255, 0.1);
+      --btn-border: rgba(255, 255, 255, 0.15);
+      --btn-shadow: rgba(255, 255, 255, 0.1);
+      --text-color: white;
+    }
+
+    body {
+      background: var(--bg);
+      background-size: 400% 400%;
+      animation: animatedBackground 10s ease infinite;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      color: var(--text-color);
+      text-align: center;
+    }
+
+    @keyframes animatedBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--text-color);
+      font-size: 16px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 8px var(--btn-shadow);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      grid-template-rows: repeat(5, 60px);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px var(--cell-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
+    }
+
+    .star {
+      animation: pop-in 0.4s ease;
+    }
+
+    .star img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px #fff400);
+    }
+
+    @keyframes pop-in {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    #winRate {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 500px) {
+      #grid {
+        transform: scale(0.9);
+      }
+    }
+    /* ...оставь весь свой CSS сверху и ДОБАВЬ в самый конец: */
+
+.glow {
+  box-shadow: 0 0 20px 8px #fff400;
+  animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 12px 4px #fff400; }
+  50% { box-shadow: 0 0 30px 12px #fff400; }
+}
+
+/* Плавающие частицы */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: floatParticle 20s linear infinite;
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 0;
+  }
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 0 8px var(--btn-shadow);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+select:hover {
+  background: rgba(34, 26, 26, 0.705);
+}
+
+select option {
+  background: #010101c2;
+  color: var(--text-color);
+  padding: 10px;
+}
+
+  </style>
+</head>
+<body>
+  <div id="particles"></div>
+  <div id="controls">
+    <select id="theme" onchange="applyTheme(this.value)">
+      <option value="ios">iOS</option>
+      <option value="cosmos">Космос</option>
+      <option value="candy">Канди</option>
+    </select>
+    <select id="starCount">
+      <option value="3">3 звезды</option>
+      <option value="5">5 звёзд</option>
+      <option value="7" selected>7 звёзд</option>
+    </select>
+  </div>
+  <div id="winRate">Шанс выигрыша: 97%</div>
+  <div id="grid"></div>
+  <button onclick="generateStars()">Новый раунд</button>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const winRateText = document.getElementById('winRate');
+
+    function generateGrid() {
+      grid.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        grid.appendChild(cell);
+      }
+    }
+
+    function getRandomWinRate() {
+      const roll = Math.random();
+      if (roll < 0.03) return 100;
+      if (roll < 0.1) return (98 + Math.random() * 1).toFixed(2);
+      return (97 + Math.random() * 1).toFixed(2);
+    }
+
+    function generateStars() {
+      generateGrid();
+      const cells = document.querySelectorAll('.cell');
+      const starCount = parseInt(document.getElementById('starCount').value);
+      const used = new Set();
+
+      while (used.size < starCount) {
+        const index = Math.floor(Math.random() * 25);
+        if (!used.has(index)) {
+          used.add(index);
+          const cell = cells[index];
+          cell.classList.add('star');
+          const img = document.createElement('img');
+          img.src = 'star.png'; // добавь свой путь
+          cell.appendChild(img);
+        }
+      }
+
+      const rate = getRandomWinRate();
+      winRateText.textContent = `Шанс выигрыша: ${rate}%`;
+    }
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      if (theme === 'ios') {
+        root.style.setProperty('--bg', 'radial-gradient(circle at center, #061828, #000000)');
+        root.style.setProperty('--cell-bg', 'rgba(255, 255, 255, 0.05)');
+        root.style.setProperty('--cell-border', 'rgba(255, 255, 255, 0.08)');
+        root.style.setProperty('--cell-shadow', 'rgba(255, 255, 255, 0.05)');
+        root.style.setProperty('--btn-bg', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--btn-border', 'rgba(255, 255, 255, 0.15)');
+        root.style.setProperty('--btn-shadow', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--text-color', 'white');
+      } else if (theme === 'cosmos') {
+        root.style.setProperty('--bg', 'linear-gradient(135deg, #1e0033, #330066, #000033)');
+        root.style.setProperty('--cell-bg', 'rgba(0, 0, 51, 0.4)');
+        root.style.setProperty('--cell-border', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--cell-shadow', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--btn-bg', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--btn-border', 'rgba(0, 0, 255, 0.3)');
+        root.style.setProperty('--btn-shadow', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--text-color', 'white');
+      } else if (theme === 'candy') {
+        root.style.setProperty('--bg', 'linear-gradient(135deg, #ffccff, #ff99cc, #ff66b2)');
+        root.style.setProperty('--cell-bg', 'rgba(255, 255, 255, 0.4)');
+        root.style.setProperty('--cell-border', 'rgba(255, 105, 180, 0.3)');
+        root.style.setProperty('--cell-shadow', 'rgba(255, 20, 147, 0.2)');
+        root.style.setProperty('--btn-bg', 'rgba(255, 182, 193, 0.2)');
+        root.style.setProperty('--btn-border', 'rgba(255, 105, 180, 0.3)');
+        root.style.setProperty('--btn-shadow', 'rgba(255, 105, 180, 0.2)');
+        root.style.setProperty('--text-color', '#400020');
+      }
+    }
+
+    applyTheme('ios');
+    generateStars();
+    function applyGlow(rate) {
+      if (parseFloat(rate) >= 98.5) {
+        grid.classList.add('glow');
+      } else {
+        grid.classList.remove('glow');
+      }
+    }
+    
+    function createParticles(count = 80) {
+      const container = document.getElementById('particles');
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = Math.random() * 100 + 'vh';
+        p.style.animationDuration = (10 + Math.random() * 20) + 's';
+        p.style.opacity = Math.random().toFixed(2);
+        container.appendChild(p);
+      }
+    }
+    
+    function generateStars() {
+      generateGrid();
+      const cells = document.querySelectorAll('.cell');
+      const starCount = parseInt(document.getElementById('starCount').value);
+      const used = new Set();
+    
+      while (used.size < starCount) {
+        const index = Math.floor(Math.random() * 25);
+        if (!used.has(index)) {
+          used.add(index);
+          const cell = cells[index];
+          cell.classList.add('star');
+          const img = document.createElement('img');
+          img.src = 'star.png'; // замени на свой путь
+          cell.appendChild(img);
+        }
+      }
+    
+      const rate = getRandomWinRate();
+      winRateText.textContent = `Шанс выигрыша: ${rate}%`;
+      applyGlow(rate);
+    }
+    
+    createParticles();
+    
+  </script>
+</body>
+</html>

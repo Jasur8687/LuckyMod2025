@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Мини Игра - Звёзды</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* убрать скролл */
+      height: 100%;
+    }
+    :root {
+      --bg: radial-gradient(circle at center, #061828, #000000);
+      --cell-bg: rgba(255, 255, 255, 0.05);
+      --cell-border: rgba(255, 255, 255, 0.08);
+      --cell-shadow: rgba(255, 255, 255, 0.05);
+      --btn-bg: rgba(255, 255, 255, 0.1);
+      --btn-border: rgba(255, 255, 255, 0.15);
+      --btn-shadow: rgba(255, 255, 255, 0.1);
+      --text-color: white;
+    }
+
+    body {
+      background: var(--bg);
+      background-size: 400% 400%;
+      animation: animatedBackground 10s ease infinite;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content:center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      color: var(--text-color);
+      text-align: center;
+    }
+
+    @keyframes animatedBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #controls {
+      align-items: start;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: start;
+      gap: 10px;
+
+    }
+
+ select, button {
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--text-color);
+      font-size: 16px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 8px var(--btn-shadow);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+
+    main {
+      position: absolute;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     height: calc(100vh - 300px);
+   }
+
+   #result {
+    margin-bottom: 30px;
+     width: 200px;
+     height: 200px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background-size: cover;
+     background-position: center;
+   }
+
+    /* ...оставь весь свой CSS сверху и ДОБАВЬ в самый конец: */
+
+.glow {
+  box-shadow: 0 0 20px 8px #fff400;
+  animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 12px 4px #fff400; }
+  50% { box-shadow: 0 0 30px 12px #fff400; }
+}
+
+/* Плавающие частицы */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: floatParticle 20s linear infinite;
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 0;
+  }
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 12px;
+  padding: 10px 10px;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 0 8px var(--btn-shadow);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: 0.2s ease;
+  position: relative;
+  z-index: 1;
+  bottom: 285px;
+}
+
+select:hover {
+  background: rgba(34, 26, 26, 0.705);
+}
+
+select option {
+  background: #010101c2;
+  color: var(--text-color);
+  padding: 10px;
+}
+.text {
+  position: absolute;
+  font-family: Arial, Helvetica, sans-serif bold;
+  font-size: 14px;
+  align-items: center;
+  color: #ffffff;
+ top: 100px;}
+
+
+  </style>
+</head>
+<body>
+
+  <div id="particles"></div>
+
+  <div id="controls">
+    <select id="theme" onchange="applyTheme(this.value)">
+      <option value="ios">iOS</option>
+      <option value="cosmos">Космос</option>
+      <option value="candy">Канди</option>
+    </select>
+  </div>
+
+  <div class="text">
+    Нажмите НОВЫЙ РАУНД для получения сигнала
+  </div>
+   <main>
+            <div id="result"></div>
+            <button onclick="startNewRound()">НОВЫЙ РАУНД</button>
+          </main>
+
+  <script>
+    function createParticles(count = 80) {
+      const container = document.getElementById('particles');
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = Math.random() * 100 + 'vh';
+        p.style.animationDuration = (10 + Math.random() * 20) + 's';
+        p.style.opacity = Math.random().toFixed(2);
+        container.appendChild(p);
+      }
+    }
+    
+    createParticles();
+    
+     // Массив с картинками
+     const images = [
+     "img/signal.jpg", // Замени на свои ссылки
+     "img/result2.png",
+     "img/result3.png",
+     "img/result5.png",
+     "img/result6.png",
+     "img/result7.png",
+     "img/result8.png",
+     "img/result9.png",
+     "img/result10.png",
+     "img/result11.png",
+     "img/result12.png",
+     "img/result13.png",
+     "img/result14.png",
+     "img/result15.png",
+     "img/result16.png",
+     "img/result17.png",
+     "img/result18.png",
+     "img/result19.png",
+     "img/result20.png",
+     "img/result21.png",
+     "img/result22.png",
+     "img/result23.png",
+     "img/result24.png",
+     "img/result25.png",
+     "img/result26.png",
+     "img/result27.png",
+     "img/result28.png",
+     "img/result29.png",
+     "img/result30.png",
+     "img/result31.png",
+     "img/result32.png",
+     "img/result33.png",
+     "img/result34.png",
+     "img/result35.png",
+     "img/result36.png",
+     "img/result37.png",
+     "img/result38.png",
+     "img/result39.png",
+     "img/result40.png",
+     "img/result41.png",
+     "img/result42.png",
+     "img/result43.png",
+     "img/result44.png",
+   ];
+
+   // Элемент для отображения результата
+   const resultFrame = document.getElementById("result");
+
+   // Путь к вашей пользовательской анимации (SVG или GIF)
+   const animationPath = "img/loading.svg"; // Замени на свой файл
+
+   // Функция для выбора случайной картинки
+   function getRandomImage() {
+     const randomIndex = Math.floor(Math.random() * images.length);
+     return images[randomIndex];
+   }
+
+   // Функция, которая запускается при нажатии на кнопку
+   function startNewRound() {
+     resultFrame.style.backgroundImage = ""; // Очистить предыдущий результат
+     resultFrame.innerHTML = `<img src="${animationPath}" alt="Animation" style="width: 100px; height: 100px;">`; // Запуск анимации
+
+     // Через 3 секунды заменить анимацию на случайную картинку
+     setTimeout(() => {
+       resultFrame.innerHTML = ""; // Убрать анимацию
+       resultFrame.style.backgroundImage = `url(${getRandomImage()})`;
+     }, 3000);
+   }
+ 
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      if (theme === 'ios') {
+        root.style.setProperty('--bg', 'radial-gradient(circle at center, #061828, #000000)');
+        root.style.setProperty('--cell-bg', 'rgba(255, 255, 255, 0.05)');
+        root.style.setProperty('--cell-border', 'rgba(255, 255, 255, 0.08)');
+        root.style.setProperty('--cell-shadow', 'rgba(255, 255, 255, 0.05)');
+        root.style.setProperty('--btn-bg', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--btn-border', 'rgba(255, 255, 255, 0.15)');
+        root.style.setProperty('--btn-shadow', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--text-color', 'white');
+      } else if (theme === 'cosmos') {
+        root.style.setProperty('--bg', 'linear-gradient(135deg, #1e0033, #330066, #000033)');
+        root.style.setProperty('--cell-bg', 'rgba(0, 0, 51, 0.4)');
+        root.style.setProperty('--cell-border', 'rgba(255, 255, 255, 0.1)');
+        root.style.setProperty('--cell-shadow', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--btn-bg', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--btn-border', 'rgba(0, 0, 255, 0.3)');
+        root.style.setProperty('--btn-shadow', 'rgba(0, 0, 255, 0.2)');
+        root.style.setProperty('--text-color', 'white');
+      } else if (theme === 'candy') {
+        root.style.setProperty('--bg', 'linear-gradient(135deg, #ffccff, #ff99cc, #ff66b2)');
+        root.style.setProperty('--cell-bg', 'rgba(255, 255, 255, 0.4)');
+        root.style.setProperty('--cell-border', 'rgba(255, 105, 180, 0.3)');
+        root.style.setProperty('--cell-shadow', 'rgba(255, 20, 147, 0.2)');
+        root.style.setProperty('--btn-bg', 'rgba(255, 182, 193, 0.2)');
+        root.style.setProperty('--btn-border', 'rgba(255, 105, 180, 0.3)');
+        root.style.setProperty('--btn-shadow', 'rgba(255, 105, 180, 0.2)');
+        root.style.setProperty('--text-color', '#400020');
+      }
+    }
+
+    applyTheme('ios');
+    generateStars();
+    function applyGlow(rate) {
+      if (parseFloat(rate) >= 98.5) {
+        grid.classList.add('glow');
+      } else {
+        grid.classList.remove('glow');
+      }
+    }
+    
+  </script>
+</body>
+</html>

@@ -5,14 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iOS Style App</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif; 
-      background: rgb(255, 255, 255);
-      background: radial-gradient(circle, rgba(255,255,255,1) 5%, rgba(20,52,120,1) 48%, rgba(0,0,0,1) 66%);
-      overflow: hidden;
+    :root {
+      --bg: radial-gradient(circle at center, #061828, #000000);
+      --cell-bg: rgba(255, 255, 255, 0.05);
+      --cell-border: rgba(255, 255, 255, 0.08);
+      --cell-shadow: rgba(255, 255, 255, 0.05);
+      --btn-bg: rgba(255, 255, 255, 0.1);
+      --btn-border: rgba(255, 255, 255, 0.15);
+      --btn-shadow: rgba(255, 255, 255, 0.1);
+      --text-color: white;
     }
+    body {
+      background: var(--bg);
+      animation: animatedBackground 10s ease infinite;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text-color);
+      text-align: center;
+    }
+
+    @keyframes animatedBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      overflow: hidden;
+      pointer-events: auto;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;  /* IE и Edge */
+      scrollbar-width: none;     /* Firefox */
+    }
+    
+    iframe::-webkit-scrollbar {
+      display: none;  /* Chrome, Safari, Opera */
+    }
+    
+    /* Плавающие частицы */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: floatParticle 20s linear infinite;
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 0;
+  }
+}
     header {
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
@@ -23,7 +92,7 @@
       align-items: center;
       box-shadow: 0 4px 30px rgba(26, 23, 23, 0.1);
     }
-    
+
     .header-container {
       display: flex;
       align-items: center;
@@ -31,78 +100,34 @@
       max-width: 1200px; /* Ограничиваем ширину хедера */
       justify-content: space-between; /* Размещаем значки по краям */
     }
-    
+
     .header-icon {
       width: 40px;
       height: 40px;
       background-size: cover;
       background-position: center;
     }
-    
+
     #logo-icon {
-      background-image: url('img/1win.png'); /* Путь к значку логотипа */
+      background-image: url('img/1win.png');
       padding-left: 25px;
     }
-    
+
     #telegram-icon {
-      background-image: url('img/TG.jpg'); /* Путь к значку Telegram */
+      background-image: url('img/TG.jpg');
       border-radius: 50px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
-    
+
     .header-title {
       font-size: 18px;
       color: white;
       text-align: center;
-      flex: 1; /* Расширяет текст, чтобы он располагался между значками */
-      margin: 0 20px; /* Отступы между текстом и значками */
+      flex: 1;
+      margin: 0 20px;
     }
+
     
-.text {
-  font-family:Arial, Helvetica, sans-serif bold;
-  font-size: 14px;
-  align-items: center;
-  color: #ffffff;
-  padding-bottom: 75px;
-}
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 150px);
-    }
-
-    #result {
-      width: 200px;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      background-size: cover;
-      background-position: center;
-    }
-
-    button {
-      font-family:sans-serif;
-      font-weight: bold;
-      margin-top: 70px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #0153aa;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    button:hover {
-      transition: all 0.5s;
-      background-color: #2b1f9c;
-    }
-
     footer {
       border-top: 5px solid rgba(255, 42, 0, 0.312);
       position: absolute;
@@ -124,27 +149,33 @@
       background-position: center;
       border-radius: 10px;
       display: flex;
-      align-items:normal;
-      justify-content:space-around;
+      align-items: normal;
+      justify-content: space-around;
       font-size: 11px;
-      color: white; /* Цвет текста */
+      color: white;
       font-weight: bold;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Тень для текста */
-      margin-bottom: 20px;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
+    
+    .card.active {
+      border: 2px solid #00ffcc;
+      box-shadow: 0 0 10px #b3ea28a4;
+      transform: scale(1.1);
+      transition: 0.2s ease;
+    }
+    
     
     .card#card1 {
-      filter: blur(1.5px);
-      width: 50px;
-      height: 50px;
-      border: 1px solid rgb(255, 255, 255);
+      width: 60px;
+      height: 60px; 
+      border: 2px solid #cdcdcdb6;
       background-image: url('img/mines.jpg'); /* Замени на свою ссылку */
-      z-index: 1;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
     .card#card1 span {
-      z-index: 2;
+      padding-top: 40px;
     }
-    
+
     .card#card2 {
       width: 60px;
       height: 60px; 
@@ -157,128 +188,79 @@
     }
 
     .card#card3 { 
-      filter: blur(1.5px);
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border: 1px solid rgb(255, 255, 255);
       background-image: url('img/Bum.jpeg'); /* Замени на свою ссылку */
     }
-    
-
-    .card.selected {
-      background-color: #007bff;
-      color: white;
+    .card#card3 span {
+      padding-top: 40px;
     }
-    
+
+    #gameContainer {
+      display: none; 
+      width: 100%; 
+      height: 90vh;
+      overflow: hidden;
+    }
   </style>
-
 </head>
-
 <body>
-
+  
   <header>
     <div class="header-container">
       <a href="https://1wrjmw.com/v3/lucky-jet-updated?p=vayp">
-        <div class="header-icon" id="logo-icon">
-        </div></a>
+        <div class="header-icon" id="logo-icon"></div>
+      </a>
       <h1 class="header-title">MODEX AI</h1>
-<a href="https://t.me/modex_vzlom">
-  <div class="header-icon" id="telegram-icon"></div>
-</a>
-      
+      <a href="https://t.me/modex_vzlom">
+        <div class="header-icon" id="telegram-icon"></div>
+      </a>
     </div>
   </header>
-  
-
-  <main>
-    <div class="text">
-    Нажмите НОВЫЙ РАУНД для получения сигнала 
-    </div>
-    <div id="result">
-      <!-- Анимация или результат появятся здесь -->
-    </div>
-    <button onclick="startNewRound()">НОВЫЙ РАУНД</button>
-  </main>
+  <div id="particles"></div>
+  <div id="gameContainer">
+    <iframe id="gameFrame" src="" width="100%" height="100vh" overflow="hidden" frameborder="0" scrolling="no" style="border: none;"></iframe>
+  </div>
+  <h1 id="gameTitle">Привет выбери игру и погнали ✅</h1>
 
   <footer>
-    <div class="card" id="card1"><span> < /span></div>
-    <div class="card" id="card2" selected"><span> Lucky Jet </span></div>
-    <div class="card" id="card3"><span></span></div>
+    <div class="card" id="card1" onclick="openGame('mines.html', this)"><span>Mines</span></div>
+<div class="card" id="card2" onclick="openGame('jet.html', this)"><span>Lucky Jet</span></div>
+<div class="card" id="card3" onclick="openGame('bombucks.html', this)"><span>BumBucks</span></div>
+    
   </footer>
+  
+  
 
   <script>
-    // Массив с картинками
-    const images = [
-      "img/signal.jpg", // Замени на свои ссылки
-      "img/result2.png",
-      "img/result3.png",
-      "img/result5.png",
-      "img/result6.png",
-      "img/result7.png",
-      "img/result8.png",
-      "img/result9.png",
-      "img/result10.png",
-      "img/result11.png",
-      "img/result12.png",
-      "img/result13.png",
-      "img/result14.png",
-      "img/result15.png",
-      "img/result16.png",
-      "img/result17.png",
-      "img/result18.png",
-      "img/result19.png",
-      "img/result20.png",
-      "img/result21.png",
-      "img/result22.png",
-      "img/result23.png",
-      "img/result24.png",
-      "img/result25.png",
-      "img/result26.png",
-      "img/result27.png",
-      "img/result28.png",
-      "img/result29.png",
-      "img/result30.png",
-      "img/result31.png",
-      "img/result32.png",
-      "img/result33.png",
-      "img/result34.png",
-      "img/result35.png",
-      "img/result36.png",
-      "img/result37.png",
-      "img/result38.png",
-      "img/result39.png",
-      "img/result40.png",
-      "img/result41.png",
-      "img/result42.png",
-      "img/result43.png",
-      "img/result44.png",
-    ];
-
-    // Элемент для отображения результата
-    const resultFrame = document.getElementById("result");
-
-    // Путь к вашей пользовательской анимации (SVG или GIF)
-    const animationPath = "img/loading.svg"; // Замени на свой файл
-
-    // Функция для выбора случайной картинки
-    function getRandomImage() {
-      const randomIndex = Math.floor(Math.random() * images.length);
-      return images[randomIndex];
+    function openGame(gameUrl, element) {
+      const gameContainer = document.getElementById("gameContainer");
+      const gameFrame = document.getElementById("gameFrame");
+      const cards = document.querySelectorAll(".card");
+      const gameTitle = document.getElementById("gameTitle");
+  
+      // Убираем активный стиль со всех карточек
+      cards.forEach(card => card.classList.remove("active"));
+      // Добавляем активный стиль на нажатую карточку
+      element.classList.add("active");
+  
+      // Скрываем заголовок h1
+      if (gameTitle) {
+        gameTitle.style.display = "none";
+      }
+  
+      // Показываем iframe
+      gameFrame.src = gameUrl;
+      gameContainer.style.display = "block";
     }
-
-    // Функция, которая запускается при нажатии на кнопку
-    function startNewRound() {
-      resultFrame.style.backgroundImage = ""; // Очистить предыдущий результат
-      resultFrame.innerHTML = `<img src="${animationPath}" alt="Animation" style="width: 100px; height: 100px;">`; // Запуск анимации
-
-      // Через 3 секунды заменить анимацию на случайную картинку
-      setTimeout(() => {
-        resultFrame.innerHTML = ""; // Убрать анимацию
-        resultFrame.style.backgroundImage = `url(${getRandomImage()})`;
-      }, 3000);
-    }
-    
   </script>
+  
+  
+  
+  
+  
+  
 
 </body>
 </html>
